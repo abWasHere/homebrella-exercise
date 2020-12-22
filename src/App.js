@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { Component } from "react";
+import Products from "./components/Products";
+import Form from "./components/Form";
+const ids = require("short-id");
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export class App extends Component {
+	state = {
+		products: [],
+	};
+
+	handleSubmit = (price, name) => {
+		let id = ids.generate();
+		const newProducts = [...this.state.products, { id, price, name }];
+		this.setState({ products: newProducts });
+	};
+
+	handleDelete = (deleteItem) => {
+		const cleanProducts = this.state.products.filter(
+			(product) => product.id !== deleteItem.id
+		);
+		this.setState({ products: cleanProducts });
+	};
+
+	render() {
+		return (
+			<div className="App">
+				<hr />
+				<Products
+					products={this.state.products}
+					handleDelete={this.handleDelete}
+				/>
+				<hr />
+				<Form handleSubmit={this.handleSubmit} />
+			</div>
+		);
+	}
 }
 
 export default App;
